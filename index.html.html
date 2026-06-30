@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>営業組織 課題ヒアリングシート</title>
+<style>
+  :root{
+    --bg:#0B0B0B; --panel:#141414; --panel-2:#1B1B1B; --line:#2A2A2A;
+    --gold:#C9A24B; --gold-dim:#8A6E32; --ink:#EDE7D7; --ink-dim:#9C9384;
+    --weak:#E0524A; --mid:#D9A441; --strong:#5FA873;
+    --s:#C9A24B; --p:#6FA8C7; --r:#B98AD1; --o:#7FB97F;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"Yu Gothic","YuGothic","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.6; padding:28px 20px 60px;
+  }
+  .wrap{max-width:1200px;margin:0 auto;}
+
+  .head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+    border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:22px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand .mark{width:10px;height:34px;background:var(--gold);transform:skewX(-12deg);}
+  .eyebrow{font-size:11px;letter-spacing:.28em;color:var(--gold);margin:0 0 4px;font-weight:700;}
+  h1{font-size:25px;margin:0;letter-spacing:.04em;font-weight:700;}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;}
+  .meta label{font-size:11px;color:var(--ink-dim);display:block;margin-bottom:3px;letter-spacing:.08em;}
+  .meta input{background:var(--panel);border:1px solid var(--line);color:var(--ink);
+    border-radius:4px;padding:7px 10px;font-size:13px;font-family:inherit;min-width:140px;}
+  .meta input:focus{outline:none;border-color:var(--gold);}
+  .lead{font-size:13px;color:var(--ink-dim);margin:-4px 0 20px;max-width:820px;}
+  .lead b{color:var(--ink);font-weight:600;}
+
+  .grid{display:grid;grid-template-columns:1fr 412px;gap:26px;align-items:start;}
+
+  .fn{border-bottom:1px solid var(--line);padding:14px 0;}
+  .fn:first-child{padding-top:0;}
+  .fn-head{display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:baseline;margin-bottom:9px;}
+  .fn-num{font-size:13px;color:var(--gold);font-weight:700;font-variant-numeric:tabular-nums;}
+  .fn-title{font-size:15.5px;font-weight:700;margin:0;}
+  .items{display:flex;flex-direction:column;gap:6px;margin-left:44px;}
+  .item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;}
+  .item-label{font-size:13px;color:var(--ink);display:flex;align-items:center;}
+  .dim{font-size:9px;font-weight:700;min-width:15px;height:15px;line-height:15px;text-align:center;
+    border-radius:3px;color:#0B0B0B;flex-shrink:0;margin-right:8px;}
+  .dim.S{background:var(--s);} .dim.P{background:var(--p);}
+  .dim.R{background:var(--r);} .dim.O{background:var(--o);}
+  .opts{display:flex;gap:4px;}
+  .opts button{width:30px;height:28px;background:var(--panel);border:1px solid var(--line);
+    color:var(--ink-dim);border-radius:5px;cursor:pointer;font-family:inherit;font-size:14px;
+    font-weight:700;transition:.12s;line-height:1;}
+  .opts button:hover{border-color:var(--gold-dim);color:var(--ink);}
+  .opts button.sel-x{background:var(--weak);border-color:var(--weak);color:#1a0707;}
+  .opts button.sel-t{background:var(--mid);border-color:var(--mid);color:#1a1407;}
+  .opts button.sel-o{background:var(--strong);border-color:var(--strong);color:#07140b;}
+  .note{width:calc(100% - 44px);margin-left:44px;margin-top:8px;background:var(--panel);
+    border:1px solid var(--line);color:var(--ink);border-radius:5px;padding:6px 9px;
+    font-size:12.5px;font-family:inherit;resize:vertical;min-height:30px;}
+  .note:focus{outline:none;border-color:var(--gold);}
+  .note::placeholder{color:#5d564a;}
+
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:18px 18px 20px;position:sticky;top:18px;}
+  .panel h2{font-size:11px;letter-spacing:.22em;color:var(--gold);margin:0 0 12px;font-weight:700;}
+  .panel h2.mt{margin-top:22px;}
+  .radar-wrap{display:flex;justify-content:center;}
+  svg{display:block;width:100%;height:auto;max-width:376px;}
+
+  .spro{display:flex;flex-direction:column;gap:9px;}
+  .srow{display:grid;grid-template-columns:104px 1fr 40px;align-items:center;gap:10px;}
+  .slabel{font-size:11.5px;color:var(--ink);display:flex;align-items:center;}
+  .strack{height:15px;background:var(--panel-2);border-radius:8px;overflow:hidden;}
+  .sfill{height:100%;width:0;border-radius:8px;transition:width .45s cubic-bezier(.2,.7,.3,1),background .2s;}
+  .sval{font-size:11px;color:var(--ink-dim);text-align:right;font-variant-numeric:tabular-nums;}
+
+  .summary{margin-top:20px;border-top:1px solid var(--line);padding-top:15px;}
+  .digest{background:var(--panel-2);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;
+    padding:11px 13px;margin-bottom:16px;}
+  .digest .dlab{font-size:9.5px;letter-spacing:.2em;color:var(--gold);font-weight:700;margin:0 0 5px;}
+  .digest p{margin:0;font-size:13px;line-height:1.55;color:var(--ink);}
+  .digest.hidden{display:none;}
+  .summary .sline{font-size:11px;letter-spacing:.22em;color:var(--gold);margin:0 0 10px;font-weight:700;}
+  .summary .sline.is-strong{color:var(--strong);}
+  .summary .sline.is-gap{margin-top:16px;}
+  .gap{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px;}
+  .gap .gdot{flex-shrink:0;width:7px;height:7px;border-radius:50%;margin-top:6px;}
+  .gap .gtxt{font-size:12.5px;line-height:1.45;}
+  .gap .gtxt b{font-weight:700;}
+  .gap .gtxt span{color:var(--ink-dim);font-size:11px;}
+  .empty{font-size:12.5px;color:var(--ink-dim);font-style:italic;}
+  .scoreline{display:flex;justify-content:space-between;align-items:baseline;
+    margin-top:8px;padding-top:12px;border-top:1px dashed var(--line);}
+  .scoreline .lab{font-size:11px;color:var(--ink-dim);letter-spacing:.1em;}
+  .scoreline .val{font-size:24px;font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums;}
+  .scoreline .val small{font-size:12px;color:var(--ink-dim);font-weight:400;}
+
+  .footer{margin-top:26px;border-top:1px solid var(--line);padding-top:16px;
+    display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--ink-dim);}
+  .legend i{width:11px;height:11px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:-1px;}
+  .sprokey{display:flex;gap:13px;flex-wrap:wrap;font-size:10.5px;color:var(--ink-dim);margin-top:10px;}
+  .sprokey .dim{margin-right:4px;}
+  .actions{display:flex;gap:10px;}
+  .btn{background:transparent;border:1px solid var(--gold-dim);color:var(--gold);border-radius:6px;
+    padding:9px 18px;font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:.06em;
+    cursor:pointer;transition:.12s;}
+  .btn:hover{background:var(--gold);color:#1a1407;border-color:var(--gold);}
+  .btn.ghost{border-color:var(--line);color:var(--ink-dim);}
+  .btn.ghost:hover{background:var(--panel);color:var(--ink);border-color:var(--ink-dim);}
+  .scalekey{font-size:10.5px;color:var(--ink);margin-top:13px;line-height:1.7;}
+  .scalekey b{color:var(--ink-dim);}
+
+  @media(max-width:920px){.grid{grid-template-columns:1fr;}.panel{position:static;}}
+
+  @media print{
+    @page{size:A4 landscape;margin:8mm;}
+    body{background:#fff;color:#111;padding:0;font-size:9px;}
+    .lead,.scalekey,.actions{display:none;}
+    .head{border-color:#bbb;margin-bottom:10px;padding-bottom:8px;}
+    .eyebrow,.panel h2,.summary .sline,.scoreline .val{color:#8A6E32;}
+    h1{font-size:16px;} .brand .mark{background:#8A6E32;}
+    .meta input{border-color:#999;color:#111;background:#fff;}
+    .grid{grid-template-columns:1fr 330px;gap:12px;}
+    .fn{border-color:#ddd;padding:5px 0;}
+    .fn-num{color:#8A6E32;} .fn-title{font-size:10.5px;}
+    .item-label{font-size:9px;color:#111;}
+    .opts button{width:22px;height:18px;font-size:10px;background:#fff;border-color:#ccc;color:#aaa;}
+    .opts button.sel-x{background:#f3c9c6 !important;border-color:#c0392b !important;color:#111 !important;}
+    .opts button.sel-t{background:#f6e6c0 !important;border-color:#b8860b !important;color:#111 !important;}
+    .opts button.sel-o{background:#cfe6d6 !important;border-color:#3a7a4f !important;color:#111 !important;}
+    .note{background:#fff;border-color:#ccc;color:#111;min-height:18px;font-size:8.5px;}
+    .panel{background:#fff;border-color:#bbb;}
+    .digest{background:#f6f1e4;border-left-color:#8A6E32;}
+    .digest .dlab{color:#8A6E32;} .digest p{color:#111;}
+    .strack{background:#eee;}
+    .slabel,.sval,.legend,.sprokey{color:#555;}
+    svg{max-width:320px;}
+    .summary,.footer{border-color:#bbb;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="brand">
+      <div class="mark"></div>
+      <div>
+        <p class="eyebrow">SALES ORGANIZATION DIAGNOSIS</p>
+        <h1>営業組織 課題ヒアリングシート</h1>
+      </div>
+    </div>
+    <div class="meta">
+      <div><label>企業名</label><input type="text" placeholder="株式会社○○"></div>
+      <div><label>ご担当者</label><input type="text" placeholder="部署・お名前"></div>
+      <div><label>日付</label><input type="text" placeholder="2026 / 00 / 00"></div>
+    </div>
+  </div>
+
+  <p class="lead">
+    各観点を、<b>× ない / △ 一部 / ○ できている</b> で確認します。<br>
+    記入すると右側が連動し、<b>レーダーとSPROバーで強みと伸びしろが面で見えます</b>。<br>
+    できている観点は<b>活かせる強み</b>、改善できそうな点は<b>伸びしろ</b>として、それぞれ言語化されます。
+  </p>
+
+  <div class="grid">
+    <div id="fns"></div>
+
+    <div class="panel">
+      <h2>機能別マップ</h2>
+      <div class="radar-wrap">
+        <svg id="radar" viewBox="0 0 460 330" aria-label="機能別レーダーチャート"></svg>
+      </div>
+
+      <h2 class="mt">SPRO 構造ビュー</h2>
+      <div class="spro" id="spro"></div>
+
+      <div class="summary">
+        <div class="digest hidden" id="digest"><p class="dlab">ひとことで言うと</p><p id="digestText"></p></div>
+        <p class="sline is-strong">活かせる強み</p>
+        <div id="strengths"></div>
+        <p class="sline is-gap">伸ばせる伸びしろ</p>
+        <div id="gaps"></div>
+        <div class="scoreline">
+          <span class="lab">充足度</span>
+          <span class="val"><span id="totscore">–</span><small> %</small></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>
+      <div class="legend">
+        <span><i style="background:var(--weak)"></i>× ない</span>
+        <span><i style="background:var(--mid)"></i>△ 一部</span>
+        <span><i style="background:var(--strong)"></i>○ できている</span>
+      </div>
+      <div class="sprokey">
+        <span><i class="dim S"></i>Strategy 戦略</span>
+        <span><i class="dim P"></i>Process プロセス</span>
+        <span><i class="dim R"></i>Resource リソース</span>
+        <span><i class="dim O"></i>Organization 組織</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn ghost" onclick="resetAll()">クリア</button>
+      <button class="btn" onclick="window.print()">印刷 / PDF保存</button>
+    </div>
+  </div>
+
+  <p class="scalekey"><b>SPRO</b>：戦略・プロセス・リソース・組織が整合してはじめて成果が出る、というフレームワークを使って、観点ごとに分類して構造の偏りを分析します。</p>
+</div>
+
+<script>
+const FNS = [
+  {t:"ターゲティング・戦略設計", items:[
+    {x:"ICP（理想顧客像）が言語化されている", d:"S"},
+    {x:"どの手段でアプローチするかが明確", d:"P"},
+    {x:"注力する市場・セグメントの優先順位がある", d:"S"},
+  ]},
+  {t:"リード獲得", items:[
+    {x:"安定したリード獲得チャネルがある", d:"P"},
+    {x:"リードの量が目標に足りている", d:"R"},
+    {x:"リードの質（確度）を見極める基準がある", d:"S"},
+  ]},
+  {t:"インサイドセールス", items:[
+    {x:"アポ獲得のトーク・型が整っている", d:"P"},
+    {x:"商談化の基準（MQL→SQL）が定義されている", d:"S"},
+    {x:"架電・送信を担う体制と工数がある", d:"R"},
+  ]},
+  {t:"フィールドセールス", items:[
+    {x:"商談・ヒアリングの進め方に型がある", d:"P"},
+    {x:"提案・クロージングが特定の人に依存していない", d:"O"},
+    {x:"失注理由が記録・共有されている", d:"P"},
+  ]},
+  {t:"パイプライン・案件管理", items:[
+    {x:"案件のフェーズと確度が可視化されている", d:"P"},
+    {x:"売上のヨミ（予実）が立てられている", d:"S"},
+    {x:"停滞案件を検知・対処する仕組みがある", d:"P"},
+  ]},
+  {t:"ナーチャリング・既存深耕", items:[
+    {x:"失注・休眠への再接点が設計されている", d:"P"},
+    {x:"既存のアップセル／クロスセルを狙えている", d:"S"},
+    {x:"継続的な情報提供の仕組みがある", d:"P"},
+  ]},
+  {t:"営業人材・組織体制", items:[
+    {x:"必要な人数・役割が揃っている", d:"R"},
+    {x:"育成・オンボーディングの仕組みがある", d:"O"},
+    {x:"IS／FS など分業と連携が機能している", d:"O"},
+  ]},
+  {t:"ツール・データ活用", items:[
+    {x:"SFA／CRM が運用されている", d:"R"},
+    {x:"データが意思決定・改善に使われている", d:"P"},
+    {x:"必要なツールへの投資がされている", d:"R"},
+  ]},
+];
+const vals = FNS.map(f=>f.items.map(()=>-1)); // -1未選択 / 0× / 1△ / 2○
+const DIMS=[{k:"S",n:"戦略"},{k:"P",n:"プロセス"},{k:"R",n:"リソース"},{k:"O",n:"組織"}];
+
+function colorByRatio(r){
+  const c=getComputedStyle(document.documentElement);
+  if(r<0.4) return c.getPropertyValue('--weak').trim();
+  if(r<0.7) return c.getPropertyValue('--mid').trim();
+  return c.getPropertyValue('--strong').trim();
+}
+function fnScore(fi){
+  const v=vals[fi].filter(x=>x>=0);
+  if(!v.length) return null;
+  return v.reduce((s,x)=>s+x,0)/(v.length*2)*5;
+}
+
+function build(){
+  const root=document.getElementById('fns');
+  root.innerHTML=FNS.map((f,fi)=>{
+    const items=f.items.map((it,ii)=>`
+      <div class="item">
+        <span class="item-label"><span class="dim ${it.d}">${it.d}</span>${it.x}</span>
+        <div class="opts" data-fi="${fi}" data-ii="${ii}">
+          <button data-v="0" title="ない">×</button>
+          <button data-v="1" title="一部">△</button>
+          <button data-v="2" title="できている">○</button>
+        </div>
+      </div>`).join('');
+    return `<div class="fn">
+      <div class="fn-head"><span class="fn-num">0${fi+1}</span><p class="fn-title">${f.t}</p></div>
+      <div class="items">${items}</div>
+      <textarea class="note" placeholder="現状・課題のメモ（任意）"></textarea>
+    </div>`;
+  }).join('');
+
+  root.querySelectorAll('.opts').forEach(g=>{
+    const fi=+g.dataset.fi, ii=+g.dataset.ii;
+    g.querySelectorAll('button').forEach(b=>{
+      b.addEventListener('click',()=>{
+        const v=+b.dataset.v;
+        vals[fi][ii]= vals[fi][ii]===v ? -1 : v;
+        render();
+      });
+    });
+  });
+}
+
+const RLABEL=[
+  ["ターゲティング","・戦略設計"],
+  ["リード獲得"],
+  ["インサイド","セールス"],
+  ["フィールド","セールス"],
+  ["パイプライン","・案件管理"],
+  ["ナーチャリング","・既存深耕"],
+  ["営業人材","・組織体制"],
+  ["ツール","・データ活用"],
+];
+
+function buildRadar(){
+  const svg=document.getElementById('radar');
+  const cx=230,cy=160,R=120,N=FNS.length;
+  const c=getComputedStyle(document.documentElement);
+  const line=c.getPropertyValue('--line').trim();
+  const gold=c.getPropertyValue('--gold').trim();
+  const inkdim=c.getPropertyValue('--ink-dim').trim();
+  const ang=i=>(-90+i*360/N)*Math.PI/180;
+  const pt=(i,r)=>[cx+Math.cos(ang(i))*r, cy+Math.sin(ang(i))*r];
+  let g='';
+  for(let k=1;k<=5;k++){let p='';for(let i=0;i<N;i++){const[x,y]=pt(i,R*k/5);p+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';}g+=`<path d="${p}Z" fill="none" stroke="${line}" stroke-width="1"/>`;}
+  for(let i=0;i<N;i++){const[x,y]=pt(i,R);g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${line}" stroke-width="1"/>`;
+    const[lx,ly]=pt(i,R+15);const a=Math.abs(lx-cx)<8?'middle':(lx>cx?'start':'end');
+    const lines=RLABEL[i]; const lh=14; const y0=ly-(lines.length-1)*lh/2+3;
+    const ts=lines.map((ln,k)=>`<tspan x="${lx.toFixed(1)}" y="${(y0+k*lh).toFixed(1)}">${ln}</tspan>`).join('');
+    g+=`<text fill="${inkdim}" font-size="13" text-anchor="${a}">${ts}</text>`;}
+  const sc=FNS.map((_,i)=>fnScore(i));
+  if(sc.some(s=>s!==null)){
+    let p='';for(let i=0;i<N;i++){const r=R*Math.max(sc[i]||0,0.001)/5;const[x,y]=pt(i,r);p+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' ';}
+    g+=`<path d="${p}Z" fill="${gold}33" stroke="${gold}" stroke-width="2" stroke-linejoin="round"/>`;
+    for(let i=0;i<N;i++){if(sc[i]===null)continue;const r=R*sc[i]/5;const[x,y]=pt(i,r);
+      g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.4" fill="${colorByRatio(sc[i]/5)}" stroke="#0B0B0B" stroke-width="1"/>`;}
+  } else { g+=`<text x="${cx}" y="${cy+4}" fill="${inkdim}" font-size="12" text-anchor="middle">選択すると表示されます</text>`; }
+  svg.innerHTML=g;
+}
+
+const SPRO_PHRASE = {
+  S:{strong:"誰に・なぜ売るかの狙いが描けている", weak:"戦略（狙いの定義）", lever:"狙いを定めれば"},
+  P:{strong:"営業の型・プロセスが回っている", weak:"営業プロセスの型化", lever:"型化を進めれば"},
+  R:{strong:"人材・ツールのリソースが揃っている", weak:"人員・ツールのリソース", lever:"リソースを補えば"},
+  O:{strong:"分業と連携の組織が機能している", weak:"組織の分業・連携", lever:"連携を整えれば"},
+};
+
+function sproRatios(){
+  const out={};
+  DIMS.forEach(d=>{
+    let v=[];
+    FNS.forEach((f,fi)=>f.items.forEach((it,ii)=>{ if(it.d===d.k && vals[fi][ii]>=0) v.push(vals[fi][ii]); }));
+    out[d.k]= v.length? v.reduce((s,x)=>s+x,0)/(v.length*2) : null;
+  });
+  return out;
+}
+
+function buildSpro(){
+  const r=sproRatios();
+  const el=document.getElementById('spro');
+  el.innerHTML=DIMS.map(d=>{
+    const ratio=r[d.k];
+    const w=ratio===null?0:ratio*100;
+    const col=ratio===null?'transparent':colorByRatio(ratio);
+    return `<div class="srow">
+      <span class="slabel"><span class="dim ${d.k}">${d.k}</span>${d.n}</span>
+      <div class="strack"><div class="sfill" style="width:${w}%;background:${col}"></div></div>
+      <span class="sval">${ratio===null?'–':Math.round(w)+'%'}</span>
+    </div>`;
+  }).join('');
+}
+
+function buildDigest(){
+  const box=document.getElementById('digest');
+  const txt=document.getElementById('digestText');
+  const r=sproRatios();
+  const rated=DIMS.map(d=>({k:d.k,v:r[d.k]})).filter(o=>o.v!==null);
+  if(rated.length<2){ box.classList.add('hidden'); return; }
+
+  const overall=rated.reduce((s,o)=>s+o.v,0)/rated.length;
+  rated.sort((a,b)=>a.v-b.v);
+  const low=rated[0], high=rated[rated.length-1];
+
+  let msg;
+  if(overall>=0.75){
+    msg=`営業の仕組みは全体に高い水準で整っています。${SPRO_PHRASE[high.k].strong}のが土台です。あとは強みをさらに尖らせ、差別化の軸にできる段階です。`;
+  } else if(overall<0.3){
+    msg=`まだ土台づくりの段階です。なかでも${SPRO_PHRASE[low.k].weak}から着手すると、変化がいちばん早く表れます。`;
+  } else if(high.v-low.v<0.15){
+    msg=`強みと課題が大きく偏ってはいない状態です。${SPRO_PHRASE[low.k].weak}を一段引き上げると、全体が安定して伸びます。`;
+  } else {
+    msg=`${SPRO_PHRASE[high.k].strong}一方で、${SPRO_PHRASE[low.k].weak}に伸びしろがあります。${SPRO_PHRASE[low.k].lever}、いまの強みがそのまま成果に直結します。`;
+  }
+  txt.textContent=msg;
+  box.classList.remove('hidden');
+}
+
+function buildSummary(){
+  const gaps=document.getElementById('gaps');
+  const str=document.getElementById('strengths');
+  let all=[];
+  FNS.forEach((f,fi)=>f.items.forEach((it,ii)=>{ if(vals[fi][ii]>=0) all.push({v:vals[fi][ii],fn:f.t,x:it.x}); }));
+  const tot=document.getElementById('totscore');
+  tot.textContent= all.length? Math.round(all.reduce((s,o)=>s+o.v,0)/(all.length*2)*100) : '–';
+
+  if(all.length<3){
+    str.innerHTML='';
+    gaps.innerHTML='<p class="empty">3観点以上を評価すると、強みと伸びしろが表示されます。</p>';
+    return;
+  }
+  const row=(o,col,sub)=>`<div class="gap"><span class="gdot" style="background:${col}"></span>
+      <div class="gtxt"><b>${o.x}</b><br><span>${o.fn}${sub?'　/　'+sub:''}</span></div></div>`;
+
+  // 強み: ○
+  const strong=all.filter(o=>o.v===2).slice(0,4);
+  str.innerHTML = strong.length
+    ? strong.map(o=>row(o,'var(--strong)','')).join('')
+    : '<p class="empty">まずは土台づくりから。一つ仕組み化できれば、それが強みになります。</p>';
+
+  // 伸びしろ: ×△（×優先）
+  const weak=all.filter(o=>o.v<2).sort((a,b)=>a.v-b.v).slice(0,4);
+  gaps.innerHTML = weak.length
+    ? weak.map(o=>row(o, o.v===0?'var(--weak)':'var(--mid)', o.v===0?'できていない':'一部のみ')).join('')
+    : '<p class="empty">大きな欠けは見当たりません。強みを軸に攻めの設計へ。</p>';
+}
+
+function render(){
+  document.querySelectorAll('.opts').forEach(g=>{
+    const fi=+g.dataset.fi, ii=+g.dataset.ii, cur=vals[fi][ii];
+    g.querySelectorAll('button').forEach(b=>{
+      const v=+b.dataset.v; b.className='';
+      if(cur===v) b.classList.add(v===0?'sel-x':v===1?'sel-t':'sel-o');
+    });
+  });
+  buildRadar(); buildSpro(); buildSummary(); buildDigest();
+}
+
+function resetAll(){
+  vals.forEach(r=>r.fill(-1));
+  document.querySelectorAll('.note').forEach(n=>n.value='');
+  render();
+}
+
+build(); render();
+</script>
+</body>
+</html>
